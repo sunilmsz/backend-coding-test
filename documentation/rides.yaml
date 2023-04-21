@@ -1,0 +1,190 @@
+openapi: "3.0.0"
+
+tags:
+  name: rides
+  description: rides Management API's
+
+paths:
+  /rides:
+    post:
+      summary: create a new ride
+      tags:
+        - rides
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_lat:
+                  type: number
+                start_long:
+                  type: number
+                end_lat:
+                  type: number
+                end_long:
+                  type: number
+                rider_name:
+                  type: string
+                driver_name:
+                  type: string
+                driver_vehicle:
+                  type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      type: object
+                      properties:
+                        rideId:
+                          type: number
+                        startLat:
+                          type: number
+                        startLong:
+                          type: number
+                        endLat:
+                          type: number
+                        endLong:
+                          type: number
+                        riderName:
+                          type: string
+                        driverName:
+                          type: string
+                        driverVehicle:
+                          type: string
+                        created:
+                          type: string
+
+                  - type: object
+                    properties:
+                      error_code:
+                        type: string
+                        example: "VALIDATION_ERROR"
+                      message:
+                        type: string
+
+    get:
+      summary: return all available rides with all rides data
+      tags:
+        - rides
+
+      parameters:
+        - in: query
+          name: start
+          schema:
+            type: string
+          description: from where records should start in pagination
+          default: 0
+
+        - in: query
+          name: count
+          schema:
+            type: string
+          description: how many records should return per page or request
+          default: 10
+
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      metaData:
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          start:
+                            type: number
+                          count:
+                            type: number
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            rideId:
+                              type: number
+                            startLat:
+                              type: number
+                            startLong:
+                              type: number
+                            endLat:
+                              type: number
+                            endLong:
+                              type: number
+                            riderName:
+                              type: string
+                            driverName:
+                              type: string
+                            driverVehicle:
+                              type: string
+                            created:
+                              type: string
+
+                  - type: object
+                    properties:
+                      error_code:
+                        type: string
+                        example: "RIDES_NOT_FOUND_ERROR"
+                      message:
+                        type: string
+                        example: "Could not find any rides"
+
+  /rides/{id}:
+    get:
+      summary: return all available rides with all rides data
+      tags:
+        - rides
+
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+          type: string
+
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      type: object
+                      properties:
+                        rideId:
+                          type: number
+                        startLat:
+                          type: number
+                        startLong:
+                          type: number
+                        endLat:
+                          type: number
+                        endLong:
+                          type: number
+                        riderName:
+                          type: string
+                        driverName:
+                          type: string
+                        driverVehicle:
+                          type: string
+                        created:
+                          type: string
+
+                  - type: object
+                    properties:
+                      error_code:
+                        type: string
+                        example: "RIDES_NOT_FOUND_ERROR"
+                      message:
+                        type: string
+                        example: "Could not find any rides"
