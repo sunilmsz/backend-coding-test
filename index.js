@@ -3,6 +3,8 @@
 const express = require('express');
 const app = express();
 const port = 8010;
+const overrideConsole = require('./src/services/overrideConsole');
+overrideConsole();
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -28,4 +30,5 @@ db.serialize(() => {
     });
 
     app.listen(port, () => console.log(`App started and listening on port ${port}`));
+
 });
