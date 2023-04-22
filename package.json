@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "test": "nyc mocha tests",
     "start": "node index.js",
     "dev": "set NODE_ENV=development &&  nodemon index.js"
   },
@@ -28,6 +28,7 @@
     "eslint": "^8.38.0",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
+    "nyc": "^15.1.0",
     "supertest": "^6.3.3"
   }
 }
