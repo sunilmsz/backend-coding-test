@@ -77,7 +77,20 @@ module.exports = (db) => {
     });
 
     app.get('/rides', (req, res) => {
-        db.all('SELECT * FROM Rides', function (err, rows) {
+
+        let { start = 0, count = 10 } = req.query;
+        start = parseInt(start);
+        count = parseInt(count);
+
+
+        if (Number.isNaN(start) || start < 0) { start = 1; }
+        if (Number.isNaN(count) || count < 1) { count = 10; }
+
+        start--;
+
+        let resultCount = 0;
+
+        db.all('SELECT count(*) as total FROM Rides', (err, rows) => {
             if (err) {
                 return res.send({
                     error_code: 'SERVER_ERROR',
@@ -92,8 +105,33 @@ module.exports = (db) => {
                 });
             }
 
-            res.send(rows);
+            resultCount = rows[0].total;
+
+
+            if (resultCount == 0 || start + 1 > resultCount) {
+                return res.send({
+                    error_code: 'RIDES_NOT_FOUND_ERROR',
+                    message: 'Could not find any rides'
+                });
+            }
+
+
+
+            db.all(`SELECT * FROM Rides LIMIT ${start},${count}`, function (err, rows) {
+                if (err) {
+                    return res.send({
+                        error_code: 'SERVER_ERROR',
+                        message: 'Unknown error'
+                    });
+                }
+
+                res.send(rows);
+            });
+
         });
+
+
+
     });
 
     app.get('/rides/:id', (req, res) => {

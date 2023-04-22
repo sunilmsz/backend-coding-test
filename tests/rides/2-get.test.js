@@ -2,16 +2,32 @@
 
 const request = require('supertest');
 
-const { app,expect } = require('../helper/serverAndDb');
+const { app, expect } = require('../helper/serverAndDb');
 
 describe(' Rides GET  API tests', function () {
-    this.timeout(50000);
+
     describe('GET /rides', () => {
-        it('should return all available rides', (done) => {
-            request(app)
+        it('should return max first 10  available rides',async () => {
+            const response = await request(app)
                 .get('/rides')
                 .expect('Content-Type', /json/)
-                .expect(200, done);
+                .expect(200);
+
+            const {body} = response;
+            expect(body.length).above(0).below(11);
+        });
+    });
+
+    describe('GET /rides', () => {
+        it('should return no rides avialbes', async () => {
+            const response = await request(app)
+                .get('/rides?start=10000')
+                .expect('Content-Type', /json/)
+                .expect(200);
+
+            const { message, error_code } = response.body;
+            expect(message).equal('Could not find any rides');
+            expect(error_code).equal('RIDES_NOT_FOUND_ERROR');
         });
     });
 
@@ -30,8 +46,8 @@ describe(' Rides GET  API tests', function () {
                 .get('/rides/-1')
                 .expect('Content-Type', /json/)
                 .expect(200);
-                
-            const {message,error_code} = response.body;
+
+            const { message, error_code } = response.body;
             expect(message).equal('Could not find any rides');
             expect(error_code).equal('RIDES_NOT_FOUND_ERROR');
 
