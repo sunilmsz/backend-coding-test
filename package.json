@@ -7,10 +7,14 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "lint": "eslint ./**/*.js --fix ",
+    "test": "npm run lint && nyc mocha tests",
     "start": "node index.js",
     "dev": "set NODE_ENV=development &&  nodemon index.js"
   },
+  "pre-push": [
+    "test"
+  ],
   "keywords": [
     "Xendit"
   ],
@@ -22,11 +26,16 @@
     "mongoose": "^7.0.4",
     "sqlite3": "^5.1.6",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.2"
+    "swagger-ui-express": "^4.6.2",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
+    "eslint": "^8.38.0",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
+    "nyc": "^15.1.0",
+    "pre-push": "^0.1.4",
     "supertest": "^6.3.3"
   }
 }
