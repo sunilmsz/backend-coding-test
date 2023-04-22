@@ -2,13 +2,10 @@
 
 const request = require('supertest');
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:');
+const {app,db,buildSchemas} = require('./helper/serverAndDb');
 
-const app = require('../src/app')(db);
-const buildSchemas = require('../src/schemas');
 
-describe('API tests', () => {
+describe(' Health API tests', () => {
     before((done) => {
         db.serialize((err) => { 
             if (err) {

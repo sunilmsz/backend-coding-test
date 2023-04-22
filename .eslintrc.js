@@ -3,7 +3,7 @@ module.exports = {
         'browser': true,
         'commonjs': true,
         'es2021': true,
-        'mocha':true,
+        'mocha': true,
         'node': true
     },
     'extends': 'eslint:recommended',
@@ -11,6 +11,9 @@ module.exports = {
     ],
     'parserOptions': {
         'ecmaVersion': 'latest'
+    },
+    'globals': {
+        'expect': 'readonly'
     },
     'rules': {
         'indent': [
