@@ -1,13 +1,8 @@
 'use strict';
 
-const express = require('express');
-const app = express();
 const port = 8010;
 const overrideConsole = require('./src/services/overrideConsole');
 overrideConsole();
-
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
 
 const swaggerUI = require('swagger-ui-express');
 const { getSpecifications } = require('./documentation/index');
