@@ -3,7 +3,7 @@
 const winston = require('winston');
 winston.transports.DailyRotateFile = require('winston-daily-rotate-file');
 
-const {  ENV = 'DEVELOPMENT' } = process.env;
+const {  ENV = 'development' } = process.env;
 
 const levels = {
     error: 0,
@@ -17,7 +17,7 @@ const levels = {
 
 // if it was run in production, show only warn and error messages.
 const level = () => {
-    return (ENV === 'DEVELOPMENT') ? 'debug' : 'warn';
+    return (ENV == 'development') ? 'debug' : 'warn';
 };
 
 
@@ -38,7 +38,7 @@ const format = winston.format.combine(
     winston.format.errors({ stack: true }),
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss A' }),
 
-    ENV === 'DEVELOPMENT' ? winston.format.colorize({ all: true }) : winston.format.uncolorize(),
+    ENV == 'development' ? winston.format.colorize({ all: true }) : winston.format.uncolorize(),
 
     winston.format.align(),
     winston.format.splat(),

@@ -1,7 +1,6 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:');
+const DB = require('../../src/services/dbService');
 const expect = require('chai').expect;
-const app = require('../../src/app')(db);
+const app = require('../../src/app');
 const buildSchemas = require('../../src/schemas');
 
-module.exports = {app,buildSchemas,db,expect};
+module.exports = {app,buildSchemas,DB,expect};
