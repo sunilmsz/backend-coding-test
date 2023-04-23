@@ -1,4 +1,4 @@
-const validateBody = ({startLatitude,startLongitude,endLatitude,endLongitude,riderName,driverName,driverVehicle}) => {
+const validateBody = ({ startLatitude, startLongitude, endLatitude, endLongitude, riderName, driverName, driverVehicle }) => {
 
     if (startLatitude < -90 || startLatitude > 90 || startLongitude < -180 || startLongitude > 180) {
         return 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively';
@@ -24,5 +24,18 @@ const validateBody = ({startLatitude,startLongitude,endLatitude,endLongitude,rid
 
 };
 
+const sanitizeStrings = ({ riderName, driverName, driverVehicle }) => {
+    const sRiderName = sanitize(riderName || '');
+    const sDriverName = sanitize(driverName || '');
+    const sDriverVehicle = sanitize(driverVehicle || '');
+    return { sRiderName, sDriverName, sDriverVehicle };
 
-module.exports = { validateBody };
+};
+
+const sanitize = (str) => {
+    // eslint-disable-next-line
+    return str.replace("'", "").replace('"', '');
+};
+
+
+module.exports = { validateBody, sanitizeStrings };

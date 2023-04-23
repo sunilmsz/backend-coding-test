@@ -2,7 +2,7 @@
 
 const request = require('supertest');
 
-const { app,expect} = require('../helper/serverAndDb');
+const { app, expect } = require('../helper/serverAndDb');
 
 
 describe(' Rides API tests', () => {
@@ -18,7 +18,7 @@ describe(' Rides API tests', () => {
     };
 
     describe('POST /rides', () => {
-  
+
         it('should create the ride', (done) => {
             request(app)
                 .post('/rides')
@@ -28,8 +28,8 @@ describe(' Rides API tests', () => {
         });
     });
 
-    const wrongSLatPaylod = {...payload,start_lat:1000};
-    
+    const wrongSLatPaylod = { ...payload, start_lat: 1000 };
+
     it('should give validation error about start_lat', async () => {
         const response = await request(app)
             .post('/rides')
@@ -42,8 +42,8 @@ describe(' Rides API tests', () => {
         expect(message).equal('Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively');
     });
 
-    const wrongRiderNamePaylod = {...payload,rider_name:null};
-    
+    const wrongRiderNamePaylod = { ...payload, rider_name: null };
+
     it('should give validation error about rider_name', async () => {
         const response = await request(app)
             .post('/rides')
@@ -56,9 +56,9 @@ describe(' Rides API tests', () => {
         expect(message).equal('Rider name must be a non empty string');
     });
 
-    
-    const wrongDriverNamePaylod = {...payload,driver_name:null};
-    
+
+    const wrongDriverNamePaylod = { ...payload, driver_name: null };
+
     it('should give validation error about driver_name', async () => {
         const response = await request(app)
             .post('/rides')
@@ -70,6 +70,23 @@ describe(' Rides API tests', () => {
         expect(error_code).equal('VALIDATION_ERROR');
         expect(message).equal('Rider name must be a non empty string');
     });
+
+    // eslint-disable-next-line
+    const sqlInjectedPaylod = { ...payload, driver_name: "SK'", rider_name: 'SK"' };
+
+    it('should sanitize strings', async () => {
+        const response = await request(app)
+            .post('/rides')
+            .send(sqlInjectedPaylod)
+            .expect('Content-Type', /json/)
+            .expect(200);
+
+        const res = response.body;
+        const { riderName, driverName } = res[0];
+        expect(riderName).equal('SK');
+        expect(driverName).equal('SK');
+    });
+
 
 
 

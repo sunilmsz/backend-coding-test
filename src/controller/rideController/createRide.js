@@ -1,5 +1,5 @@
 const responseService = require('../../services/responseService');
-const { validateBody } = require('./helper/index');
+const { validateBody,sanitizeStrings } = require('./helper/index');
 const DB = require('../../services/dbService');
 
 const createRide = async (req, res) => {
@@ -13,11 +13,14 @@ const createRide = async (req, res) => {
 
         const validationError = validateBody({ startLatitude, startLongitude, endLatitude, endLongitude, riderName, driverName, driverVehicle });
 
+        //sanitize string to avoid sql injection
+        const {sRiderName,sDriverName,sDriverVehicle} = sanitizeStrings({riderName, driverName, driverVehicle});
+
         if (validationError) {
             return responseService.error(res, validationError, 'VALIDATION_ERROR');
         }
 
-        const values = [startLatitude, startLongitude, endLatitude, endLongitude, riderName, driverName, driverVehicle];
+        const values = [startLatitude, startLongitude, endLatitude, endLongitude,sRiderName,sDriverName,sDriverVehicle];
 
         const response = await db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values);
         const inserted = await db.all(`SELECT * FROM Rides WHERE rideID = ${response.stmt.lastID}`);
