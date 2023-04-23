@@ -1,0 +1,25 @@
+config:
+  target: "http://localhost:8010"
+  phases:
+    - duration: 30
+      arrivalRate: 100
+      name : artillery load test
+
+ 
+scenarios:
+  - name: "rides api create to get flow"
+    flow:
+      - post:
+          url: "/rides"
+          json:
+            start_lat: 80
+            start_long: 100
+            end_lat: 50
+            end_long: 70
+            rider_name: 'SK'
+            driver_name: "SK"
+            driver_vehicle: "Maruti"
+      - get:
+          url: "/rides"
+      - get:
+          url: "/rides/1"
