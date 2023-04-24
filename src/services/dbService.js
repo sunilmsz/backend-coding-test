@@ -1,4 +1,5 @@
 const sqlite = require('sqlite');
+const sqlite3 = require('sqlite3');
 const buildSchemas = require('../schemas');
 class DB {
     key = null;
@@ -12,14 +13,18 @@ class DB {
     static connect = async (key = 'default') => {
         if (!DB.#connections[key]) {
 
-            const con = await sqlite.open(':memory:', { Promise });
-           
-            DB.#connections[key] = con;
-         
-            con.on('open', async () => {
-                console.log('db connected');
-                buildSchemas(con);
+            const con = await sqlite.open({
+                filename: ':memory:',
+                driver: sqlite3.cached.Database
             });
+
+            DB.#connections[key] = con;
+
+            buildSchemas(con);
+
+
+            console.log('db connected');
+
 
             return con;
 

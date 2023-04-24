@@ -23,4 +23,9 @@ Use    `/docs.json`  to view the json  to use it as backup in postman
 3. [Implement Pagination](#implement-pagination)
 4. [Refactoring](#refactoring)
 5. [Security](#security)
+
 6. [Load Testing](#load-testing)
+
+Use `npm run test:load` for load testing\
+Make sure app is runing on port 8010 via port=8010 in env or cofig.js or change port in artillery.yaml
+at the end some warnings can be show, please scroll up little you will get load test report
